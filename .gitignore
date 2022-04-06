@@ -1,0 +1,32 @@
+# Jupyter
+.ipynb_checkpoints
+
+# Data (temporary?)
+*.bz2
+*.zstd
+*.npy
+*.blosc
+*.h5
+*.pdf
+
+# Python cache
+*.py[cod]
+__pycache__
+
+# Packages
+.eggs
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+# Pycharm
+.idea
