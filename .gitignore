@@ -3,7 +3,7 @@
 
 # Data
 *.npy
-*.h5
+*.hdf5
 *.pdf
 *.ckpt*
 
