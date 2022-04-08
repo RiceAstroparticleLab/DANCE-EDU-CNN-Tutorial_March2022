@@ -1,13 +1,11 @@
 # Jupyter
 .ipynb_checkpoints
 
-# Data (temporary?)
-*.bz2
-*.zstd
+# Data
 *.npy
-*.blosc
-*.h5
+*.hdf5
 *.pdf
+*.ckpt*
 
 # Python cache
 *.py[cod]
