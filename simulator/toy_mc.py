@@ -1,5 +1,6 @@
 import numpy as np
 import numba
+import matplotlib.pyplot as plt
 
 MAX_PROPAGATION_TIME = 10**9
 
@@ -115,14 +116,16 @@ class NeutronVetoToyLightPropagator:
                 tof = np.min((tof, _time_of_flight), axis=0)
                 light_propagation_sp['tof'][_is_second_order_pmt] = tof
 
-    def generate_events(self, n_events, n_photons, spread, threshold):
+    def generate_events(self, n_events, n_photons, spread, threshold, time_spread=1.5):
         """Creates for each of the specified source positions the
         specified number of events.
         :param n_events: Number of events per source position.
         :param n_photons: Number of photons per event.
         :param spread: Spread of photon-charge distribution.
         :param threshold: Threshold to be used.
-        :returns: 3 nump.ndarrys. The first array is an array of the
+        :param time_spread: Photon time spread which should be applied
+            after drawing a photo sensor channel. 
+        :returns: 4 nump.ndarrys. The first array is an array of the
             shape n x m, where n represents the number of source
             positions and m the number of events to be simulated. It
             contains the number of photons simulated for each event at
@@ -135,7 +138,10 @@ class NeutronVetoToyLightPropagator:
             len(self.source_position),
             n_events,
             self.light_propagation,
-            n_photons)
+            n_photons,
+            self.pmt_properties,
+            time_spread,
+        )
         charge = self._get_charge(offsets, spread, threshold)
         return offsets, times, channels, charge
 
@@ -144,7 +150,10 @@ class NeutronVetoToyLightPropagator:
     def _generate_events(n_source_positions,
                          n_events,
                          light_properties,
-                         n_photons=26):
+                         n_photons,
+                         pmt_positions,
+                         time_spread,
+                        ):
         offsets = np.zeros((n_source_positions, n_events), dtype=np.int32)
         _buffer_length = n_source_positions*n_events*n_photons*2
         photon_times = np.zeros(_buffer_length, dtype=np.float32)
@@ -158,10 +167,11 @@ class NeutronVetoToyLightPropagator:
             for e_i in range(n_events):
                 times = get_photon_timing(n_photons,
                                           _light_properties['tof'].min(),
-                                          decay_constant=60)
-                channels = get_channel(times, _light_properties['tof'])
+                                          decay_constant=60,
+                                         )
+                channels = get_channel(times, _light_properties['tof'], pmt_positions)
                 _n_ph = len(times)
-                times += np.random.normal(0, 1, _n_ph)
+                times += np.random.normal(0, time_spread, _n_ph)
 
                 photon_times[offset:offset+_n_ph] = times
                 photon_channels[offset:offset+_n_ph] = channels
@@ -407,9 +417,9 @@ def get_photon_timing(av_n_ph, minimal_propagation_time, decay_constant=60):
 
 
 @numba.njit
-def get_channel(photon_times, light_propagation):
+def get_channel(photon_times, light_propagation, pmt_positions):
     res = np.zeros(len(photon_times), dtype=np.int16)
     for ind, t in enumerate(photon_times):
-        ch = np.random.choice(pmts_in_z_slice[:, 3][light_propagation < t])
+        ch = np.random.choice(pmt_positions[:, 3][light_propagation < t])
         res[ind] = ch
     return res
