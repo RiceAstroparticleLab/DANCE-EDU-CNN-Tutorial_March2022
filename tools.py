@@ -53,3 +53,15 @@ def plot_confusion_matrix(confusion_matrix,
                     )
     return fig
     
+    
+def get_random_cyrcle_position(radius, n_positions):
+    """Function which draws n random positions on a circle.
+    :param radius: Radius of the cyrcle
+    :param n_positions: Number of positions to be drawn.
+    :returns: np.array of the shape 2 x n with x/y positions
+    """
+    angle = np.random.uniform(-np.pi, np.pi, n_positions)
+    x_source = radius * np.cos(angle)
+    y_source = radius * np.sin(angle)
+    return np.array([x_source, y_source])
+

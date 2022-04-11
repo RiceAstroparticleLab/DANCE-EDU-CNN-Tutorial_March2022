@@ -1,0 +1,2 @@
+model_checkpoint_path: "my_cnn_model_circ_padding_best_check_point.ckpt"
+all_model_checkpoint_paths: "my_cnn_model_circ_padding_best_check_point.ckpt"
