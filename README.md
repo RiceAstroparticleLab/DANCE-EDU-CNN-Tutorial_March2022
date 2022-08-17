@@ -1,5 +1,7 @@
 # DANCE-EDU workshop 2022 @ Rice: A tutorial to CNNs
 
+[![DOI](https://zenodo.org/badge/478660047.svg)](https://zenodo.org/badge/latestdoi/478660047)
+
 In this repository you can find a small tutorial notebook about CNNs using python and tensorflow. The goal of the notebook is to provide you with a hand on example such that you get some basic knowledge about the idea behind CNNs. In addition, it provides you some information about the code required to build you own custom CNN. 
 
 The tutorial assumes that you have already some prior knowledge in python and packages which are typically used in the scientific context like numpy and matplotlib. In addition, I assume that you are familiar with git and you know how to download the project. If not you can find some instructions [here](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository).
